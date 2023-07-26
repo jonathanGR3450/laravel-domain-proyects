@@ -1,0 +1,39 @@
+<section class="section pt-0 position-relative pull-top mt-4">
+    <div class="container">
+        <div class="rounded shadow p-5 bg-white">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Blogs Index</h4>
+                </div>
+                <div class="col-12 mt-4">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Content</th>
+                                <th scope="col">User Id</th>
+                                <!-- <th scope="col">Edit</th>
+                                <th scope="col">Delete</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let blog of blogs let i = index;">
+                            <td>{{ blog.id }}</td>
+                            <td>{{ blog.name }}</td>
+                            <td>{{ blog.description }}</td>
+                            <td>{{ blog.user_id }}</td>
+                            <!-- <td>
+                              <button type="button" (click)="getCharacter(character.id)" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editModal">
+                                Edit
+                              </button>
+                            </td>
+                            <td><button type="button" (click)="deleteCharacter(character.id)" class="btn btn-danger btn-sm">Delete</button></td> -->
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

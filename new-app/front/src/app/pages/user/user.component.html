@@ -1,0 +1,111 @@
+<section class="section pt-0 position-relative pull-top mt-4">
+    <div class="container">
+        <div class="rounded shadow p-5 bg-white">
+            <div class="row">
+                <div class="col-12">
+                    <h4>Blogs Index for user {{ user.name }} {{ user.last_name }}</h4>
+                    <h5>Email: {{ user.email }}</h5>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h2>Create Blog</h2>
+                </div>
+                <div class="col-12">
+                    <form (ngSubmit)="saveBlog()" [formGroup]="form">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Name Blog</label>
+                                <input type="text" formControlName="name" class="form-control" id="name"
+                                    placeholder="name blog">
+                                <small
+                                    *ngIf="form.controls['name'].errors?.['required'] && form.controls['name'].touched"
+                                    class="p-error block">Name Blog is required.</small>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="description">Content</label>
+                                <input type="text" formControlName="description" class="form-control" id="description"
+                                    placeholder="content">
+                                <small
+                                    *ngIf="form.controls['description'].errors?.['required'] && form.controls['description'].touched"
+                                    class="p-error block">Content is required.</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mt-4">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Content</th>
+                                <th scope="col">User Id</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let blog of blogs let i = index;">
+                                <td>{{ blog.id }}</td>
+                                <td>{{ blog.name }}</td>
+                                <td>{{ blog.description }}</td>
+                                <td>{{ blog.user_id }}</td>
+                                <td>
+                                    <button type="button" (click)="getBlog(blog.id)" class="btn btn-primary btn-sm"
+                                        data-toggle="modal" data-target="#editModal">
+                                        Edit
+                                    </button>
+                                </td>
+                                <td><button type="button" (click)="deleteBlog(blog.id)"
+                                        class="btn btn-danger btn-sm">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Update Blog</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updateBlog()" [formGroup]="formUpdate">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="name">Name Blog</label>
+                <input type="text" formControlName="name" class="form-control" id="name" placeholder="name"
+                name="blog.name" [(ngModel)]="blog.name">
+                <small *ngIf="form.controls['name'].errors?.['required'] && form.controls['name'].touched"  class="p-error block">Name Blog is required.</small>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="description">Content</label>
+                <input type="text" formControlName="description" class="form-control" id="description" placeholder="last name"
+                name="blog.description" [(ngModel)]="blog.description">
+                <small *ngIf="form.controls['description'].errors?.['required'] && form.controls['description'].touched"  class="p-error block">Content is required.</small>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Edit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

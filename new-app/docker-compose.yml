@@ -1,0 +1,76 @@
+version: '3'
+services:
+
+  #php service
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    # image: digitalocean.com/php
+    container_name: app-ddd
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app-ddd
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+      - ./backend/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - ddd-network
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver-ddd
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./backend:/var/www
+      - ./backend/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - ddd-network
+
+  db:
+    image: postgres:12.8-alpine
+    container_name: db-ddd
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_DATABASES: ddd_laravel,ddd_laravel_testing
+    volumes:
+      - ./backend/pgdata:/var/lib/postgresql/data
+      - ./backend/init-multi-postgres-databases.sh:/docker-entrypoint-initdb.d/init-multi-postgres-databases.sh
+    networks:
+      - ddd-network
+
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - 4200:4200
+    container_name: app-front
+    volumes:
+       - ./front:/app
+       - /app/node_modules
+    networks:
+      - ddd-network
+
+#Docker Networks
+networks:
+  ddd-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  pgdata:
+    driver: local
